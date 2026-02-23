@@ -56,7 +56,7 @@
     events.forEach((event, index) => {
       const btn = document.createElement("button");
       btn.className = "bg-white shadow active:scale-95 transition p-5 rounded-2xl text-center text-lg font-semibold";
-      btn.innerHTML = event.name;
+      btn.innerText = event.name;
 
       btn.onclick = () => {
         if (!event.active) {
@@ -68,12 +68,6 @@
 
       list.appendChild(btn);
     });
-
-    localStorage.setItem("events", JSON.stringify(events));
-  }
-
-  // tambah event dinonaktifkan karena daftar dikontrol manual);
-    renderEvents();
   }
 
   function openEvent(index) {
@@ -82,14 +76,13 @@
     document.getElementById("eventPage").classList.remove("hidden");
 
     document.getElementById("eventTitle").value = events[index].name;
-    document.getElementById("eventDesc").value = events[index].note;
+    document.getElementById("eventDesc").value = events[index].note || "";
   }
 
   function saveNote() {
     events[currentIndex].name = document.getElementById("eventTitle").value;
     events[currentIndex].note = document.getElementById("eventDesc").value;
-    localStorage.setItem("events", JSON.stringify(events));
-    alert("Catatan tersimpan!");
+    alert("Catatan tersimpan di browser ini");
     goHome();
   }
 
@@ -99,7 +92,8 @@
     renderEvents();
   }
 
-  renderEvents();
+  // render saat halaman dibuka
+  document.addEventListener("DOMContentLoaded", renderEvents);
 </script>
 
 </body>
