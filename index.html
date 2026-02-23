@@ -22,7 +22,6 @@
     
 
     <div id="eventList" class="grid gap-3"></div>
-  <p id="loadingText" class="text-center text-sm text-gray-400 mt-3">Memuat event...</p>
 
     
   </div>
@@ -64,39 +63,17 @@ let events = [];
 let currentIndex = null;
 
 function loadData() {
-
   db.ref("events").on("value", snapshot => {
     const data = snapshot.val();
-
     if (data) {
-      // jika data object → ubah jadi array
-      events = Object.values(data);
+      events = data;
     } else {
-      // isi default jika kosong
       events = [
         { name: "Ramadan Sale", date: "6 - 8 Maret 2026", active: true, sections: [] },
         { name: "Big Sale Vol. 2", date: "12 - 14 Juni 2026", active: false },
         { name: "Fun Bike Part 1", date: "16 Agustus 2026", active: false },
         { name: "Fun Run Part 2", date: "13 September 2026", active: false },
         { name: "Big Sale Vol. 3", date: "29 - 31 Desember 2026", active: false }
-      ];
-
-      saveData();
-    }
-
-    renderEvents();
-  });
-}
-
-  // sinkron realtime
-  db.ref("events").on("value", snapshot => {
-    const data = snapshot.val();
-    if (data) {
-      events = data;
-    }
-    renderEvents();
-  });
-}
       ];
       saveData();
     }
@@ -110,18 +87,7 @@ function saveData() {
 
 function renderEvents() {
   const list = document.getElementById("eventList");
-  const loading = document.getElementById("loadingText");
-
-  if (!list) return;
-
   list.innerHTML = "";
-
-  if (!events || events.length === 0) {
-    loading.style.display = "block";
-    return;
-  }
-
-  loading.style.display = "none";
 
   events.forEach((event, index) => {
     const btn = document.createElement("button");
@@ -129,23 +95,9 @@ function renderEvents() {
 
     btn.innerHTML = `
       <div class="font-semibold">${event.name}</div>
-      <div class='text-sm opacity-80 mt-1'>${event.date || ''}</div>
+      <div class='text-sm opacity-80 mt-1'>${event.date}</div>
       <div class='mt-2 text-xs font-bold ${event.active ? "text-green-100 bg-green-600" : "text-yellow-800 bg-yellow-300"} inline-block px-3 py-1 rounded-full'>
         ${event.active ? "LIVE" : "SOON"}
-      </div>
-    `;
-
-    btn.onclick = () => {
-      if (!event.active) {
-        showModal();
-        return;
-      }
-      openEvent(index);
-    };
-
-    list.appendChild(btn);
-  });
-}
       </div>
     `;
 
@@ -181,26 +133,6 @@ function renderSections() {
     div.className = "bg-white p-4 rounded-2xl shadow";
 
     div.innerHTML = `
-      <input type="text" placeholder="Judul" value="${sec.title || ''}" 
-        oninput="updateSection(${i}, 'title', this.value)"
-        class="w-full font-semibold text-lg mb-2 border-b pb-1 outline-none">
-
-      <textarea placeholder="Deskripsi"
-        oninput="autoGrow(this); updateSection(${i}, 'desc', this.value)"
-        class="w-full text-sm outline-none resize-none overflow-hidden" rows="1">${sec.desc || ''}</textarea>
-
-      <button onclick="saveSection(${i})" class="mt-3 bg-green-500 text-white px-4 py-1 rounded-lg text-sm">Simpan</button>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-  events[currentIndex].sections.forEach((sec, i) => {
-    const div = document.createElement("div");
-    div.className = "bg-white p-4 rounded-2xl shadow";
-
-    div.innerHTML = `
       <input type="text" placeholder="Judul" value="${sec.title}" 
         oninput="updateSection(${i}, 'title', this.value)"
         class="w-full font-semibold text-lg mb-2 border-b pb-1 outline-none">
@@ -223,20 +155,6 @@ function addSection() {
   if (!events[currentIndex].sections) {
     events[currentIndex].sections = [];
   }
-  events[currentIndex].sections.push({ title: "", desc: "" });
-  saveData();
-  renderSections();
-}
-
-function saveSection(i) {
-  saveData();
-  showSavedModal();
-}
-
-function autoGrow(el) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
   events[currentIndex].sections.push({ title: "", desc: "" });
   saveData();
   renderSections();
@@ -269,14 +187,7 @@ function closeModal() {
   },200);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  try {
-    loadData();
-  } catch (e) {
-    console.error(e);
-    if (events && events.length) renderEvents();
-  }
-});
+loadData();
 </script>
 
   <!-- MODERN POPUP -->
@@ -309,34 +220,6 @@ function closeModal() {
     modal.classList.add("hidden");
     modal.classList.remove("flex");
   },200);
-}
-</script>
-  <!-- SAVED POPUP -->
-  <div id="savedModal" class="fixed inset-0 hidden items-center justify-center bg-black/30 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl shadow-xl px-6 py-5 text-center transform scale-90 opacity-0 transition duration-300" id="savedBox">
-      <div class="text-2xl mb-1">✅</div>
-      <div class="font-semibold">Tersimpan</div>
-    </div>
-  </div>
-
-<script>
-function showSavedModal() {
-  const modal = document.getElementById("savedModal");
-  const box = document.getElementById("savedBox");
-  modal.classList.remove("hidden");
-  modal.classList.add("flex");
-  setTimeout(()=>{
-    box.classList.remove("scale-90","opacity-0");
-    box.classList.add("scale-100","opacity-100");
-  },10);
-
-  setTimeout(()=>{
-    box.classList.add("scale-90","opacity-0");
-    setTimeout(()=>{
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-    },200);
-  },1200);
 }
 </script>
 </body>
