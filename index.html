@@ -133,6 +133,26 @@ function renderSections() {
     div.className = "bg-white p-4 rounded-2xl shadow";
 
     div.innerHTML = `
+      <input type="text" placeholder="Judul" value="${sec.title || ''}" 
+        oninput="updateSection(${i}, 'title', this.value)"
+        class="w-full font-semibold text-lg mb-2 border-b pb-1 outline-none">
+
+      <textarea placeholder="Deskripsi"
+        oninput="autoGrow(this); updateSection(${i}, 'desc', this.value)"
+        class="w-full text-sm outline-none resize-none overflow-hidden" rows="1">${sec.desc || ''}</textarea>
+
+      <button onclick="saveSection(${i})" class="mt-3 bg-green-500 text-white px-4 py-1 rounded-lg text-sm">Simpan</button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+  events[currentIndex].sections.forEach((sec, i) => {
+    const div = document.createElement("div");
+    div.className = "bg-white p-4 rounded-2xl shadow";
+
+    div.innerHTML = `
       <input type="text" placeholder="Judul" value="${sec.title}" 
         oninput="updateSection(${i}, 'title', this.value)"
         class="w-full font-semibold text-lg mb-2 border-b pb-1 outline-none">
@@ -155,6 +175,20 @@ function addSection() {
   if (!events[currentIndex].sections) {
     events[currentIndex].sections = [];
   }
+  events[currentIndex].sections.push({ title: "", desc: "" });
+  saveData();
+  renderSections();
+}
+
+function saveSection(i) {
+  saveData();
+  showSavedModal();
+}
+
+function autoGrow(el) {
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+}
   events[currentIndex].sections.push({ title: "", desc: "" });
   saveData();
   renderSections();
@@ -220,6 +254,34 @@ function closeModal() {
     modal.classList.add("hidden");
     modal.classList.remove("flex");
   },200);
+}
+</script>
+  <!-- SAVED POPUP -->
+  <div id="savedModal" class="fixed inset-0 hidden items-center justify-center bg-black/30 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-xl px-6 py-5 text-center transform scale-90 opacity-0 transition duration-300" id="savedBox">
+      <div class="text-2xl mb-1">✅</div>
+      <div class="font-semibold">Tersimpan</div>
+    </div>
+  </div>
+
+<script>
+function showSavedModal() {
+  const modal = document.getElementById("savedModal");
+  const box = document.getElementById("savedBox");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  setTimeout(()=>{
+    box.classList.remove("scale-90","opacity-0");
+    box.classList.add("scale-100","opacity-100");
+  },10);
+
+  setTimeout(()=>{
+    box.classList.add("scale-90","opacity-0");
+    setTimeout(()=>{
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    },200);
+  },1200);
 }
 </script>
 </body>
