@@ -15,25 +15,23 @@
   </div>
 
   <!-- MAIN -->
-  <div id="home" class="p-6 max-w-3xl mx-auto">
+  <div id="home" class="p-4 max-w-md mx-auto">
     <h2 class="text-xl font-semibold mb-4">Daftar Event</h2>
 
     <div id="eventList" class="grid gap-3"></div>
 
-    <button onclick="addEvent()" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-2xl shadow">
-      + Tambah Event Baru
-    </button>
+    
   </div>
 
   <!-- EVENT PAGE -->
-  <div id="eventPage" class="hidden p-6 max-w-3xl mx-auto">
+  <div id="eventPage" class="hidden p-4 max-w-md mx-auto">
     <button onclick="goHome()" class="mb-4 text-purple-600">← Kembali</button>
 
     <input id="eventTitle" type="text" placeholder="Judul catatan..."
-      class="w-full text-2xl font-bold mb-3 p-2 border rounded-xl" />
+      class="w-full text-xl font-bold mb-3 p-3 border rounded-xl" />
 
     <textarea id="eventDesc" placeholder="Tulis deskripsi atau catatan event di sini..."
-      class="w-full h-64 p-3 border rounded-xl"></textarea>
+      class="w-full h-72 p-3 border rounded-xl text-base"></textarea>
 
     <button onclick="saveNote()" class="mt-4 bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-xl">
       Simpan
@@ -41,8 +39,12 @@
   </div>
 
 <script>
-  let events = JSON.parse(localStorage.getItem("events")) || [
-    { name: "Ramadan Sale Suryatokoku 2026", note: "" }
+  const events = [
+    { name: "Ramadan Sale (6 - 8 Maret 2026)", active: true, note: "" },
+    { name: "Big Sale Vol. 2 (12 - 14 Juni 2026)", active: false },
+    { name: "Fun Bike Part 1 (16 Agustus 2026)", active: false },
+    { name: "Fun Run Part 2 (13 September 2026)", active: false },
+    { name: "Big Sale Vol. 3 (29 - 31 Desember 2026)", active: false }
   ];
 
   let currentIndex = null;
@@ -53,19 +55,24 @@
 
     events.forEach((event, index) => {
       const btn = document.createElement("button");
-      btn.className = "bg-white shadow hover:shadow-md p-4 rounded-2xl text-left";
-      btn.innerHTML = `<strong>${event.name}</strong>`;
-      btn.onclick = () => openEvent(index);
+      btn.className = "bg-white shadow active:scale-95 transition p-5 rounded-2xl text-center text-lg font-semibold";
+      btn.innerHTML = event.name;
+
+      btn.onclick = () => {
+        if (!event.active) {
+          alert("Coming Soon");
+          return;
+        }
+        openEvent(index);
+      };
+
       list.appendChild(btn);
     });
 
     localStorage.setItem("events", JSON.stringify(events));
   }
 
-  function addEvent() {
-    const name = prompt("Masukkan nama event:");
-    if (!name) return;
-    events.push({ name, note: "" });
+  // tambah event dinonaktifkan karena daftar dikontrol manual);
     renderEvents();
   }
 
