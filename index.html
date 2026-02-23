@@ -64,17 +64,29 @@ let events = [];
 let currentIndex = null;
 
 function loadData() {
-  // tampilkan default dulu supaya tidak kosong
-  if (!events || events.length === 0) {
-    events = [
-      { name: "Ramadan Sale", date: "6 - 8 Maret 2026", active: true, sections: [] },
-      { name: "Big Sale Vol. 2", date: "12 - 14 Juni 2026", active: false },
-      { name: "Fun Bike Part 1", date: "16 Agustus 2026", active: false },
-      { name: "Fun Run Part 2", date: "13 September 2026", active: false },
-      { name: "Big Sale Vol. 3", date: "29 - 31 Desember 2026", active: false }
-    ];
+
+  db.ref("events").on("value", snapshot => {
+    const data = snapshot.val();
+
+    if (data) {
+      // jika data object → ubah jadi array
+      events = Object.values(data);
+    } else {
+      // isi default jika kosong
+      events = [
+        { name: "Ramadan Sale", date: "6 - 8 Maret 2026", active: true, sections: [] },
+        { name: "Big Sale Vol. 2", date: "12 - 14 Juni 2026", active: false },
+        { name: "Fun Bike Part 1", date: "16 Agustus 2026", active: false },
+        { name: "Fun Run Part 2", date: "13 September 2026", active: false },
+        { name: "Big Sale Vol. 3", date: "29 - 31 Desember 2026", active: false }
+      ];
+
+      saveData();
+    }
+
     renderEvents();
-  }
+  });
+}
 
   // sinkron realtime
   db.ref("events").on("value", snapshot => {
