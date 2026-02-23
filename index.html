@@ -55,12 +55,12 @@
 
     events.forEach((event, index) => {
       const btn = document.createElement("button");
-      btn.className = "bg-white shadow active:scale-95 transition p-5 rounded-2xl text-center text-lg font-semibold";
+      btn.className = `shadow active:scale-95 transition p-5 rounded-2xl text-center text-lg font-semibold ${event.active ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}`;
       btn.innerText = event.name;
 
       btn.onclick = () => {
         if (!event.active) {
-          alert("Coming Soon");
+          showModal();
           return;
         }
         openEvent(index);
@@ -96,5 +96,37 @@
   document.addEventListener("DOMContentLoaded", renderEvents);
 </script>
 
+  <!-- MODERN POPUP -->
+  <div id="comingSoonModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-72 text-center transform scale-90 opacity-0 transition duration-300" id="modalBox">
+      <div class="text-3xl mb-2">🚧</div>
+      <h3 class="text-lg font-semibold mb-1">Coming Soon</h3>
+      <p class="text-sm text-gray-500 mb-4">Event ini belum tersedia.</p>
+      <button onclick="closeModal()" class="bg-purple-600 text-white px-5 py-2 rounded-xl">OK</button>
+    </div>
+  </div>
+
+<script>
+function showModal() {
+  const modal = document.getElementById("comingSoonModal");
+  const box = document.getElementById("modalBox");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  setTimeout(()=>{
+    box.classList.remove("scale-90","opacity-0");
+    box.classList.add("scale-100","opacity-100");
+  },10);
+}
+
+function closeModal() {
+  const modal = document.getElementById("comingSoonModal");
+  const box = document.getElementById("modalBox");
+  box.classList.add("scale-90","opacity-0");
+  setTimeout(()=>{
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  },200);
+}
+</script>
 </body>
 </html>
