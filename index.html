@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Out Event Suryatokoku</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-gradient-to-r from-purple-600 to-pink-500 text-white text-center py-6 shadow-lg">
+    <h1 class="text-3xl font-bold">All Out Event Suryatokoku</h1>
+    <p class="text-sm opacity-90">Manajemen & Catatan Event</p>
+  </div>
+
+  <!-- MAIN -->
+  <div id="home" class="p-6 max-w-3xl mx-auto">
+    <h2 class="text-xl font-semibold mb-4">Pilih Event</h2>
+
+    <div id="eventList" class="grid gap-3"></div>
+
+    <button onclick="addEvent()" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-2xl shadow">
+      + Tambah Event Baru
+    </button>
+  </div>
+
+  <!-- EVENT PAGE -->
+  <div id="eventPage" class="hidden p-6 max-w-3xl mx-auto">
+    <button onclick="goHome()" class="mb-4 text-purple-600">← Kembali</button>
+
+    <input id="eventTitle" type="text" placeholder="Judul catatan..."
+      class="w-full text-2xl font-bold mb-3 p-2 border rounded-xl" />
+
+    <textarea id="eventDesc" placeholder="Tulis deskripsi atau catatan event di sini..."
+      class="w-full h-64 p-3 border rounded-xl"></textarea>
+
+    <button onclick="saveNote()" class="mt-4 bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-xl">
+      Simpan
+    </button>
+  </div>
+
+<script>
+  let events = JSON.parse(localStorage.getItem("events")) || [
+    { name: "Ramadan Sale Suryatokoku 2026", note: "" }
+  ];
+
+  let currentIndex = null;
+
+  function renderEvents() {
+    const list = document.getElementById("eventList");
+    list.innerHTML = "";
+
+    events.forEach((event, index) => {
+      const btn = document.createElement("button");
+      btn.className = "bg-white shadow hover:shadow-md p-4 rounded-2xl text-left";
+      btn.innerHTML = `<strong>${event.name}</strong>`;
+      btn.onclick = () => openEvent(index);
+      list.appendChild(btn);
+    });
+
+    localStorage.setItem("events", JSON.stringify(events));
+  }
+
+  function addEvent() {
+    const name = prompt("Masukkan nama event:");
+    if (!name) return;
+    events.push({ name, note: "" });
+    renderEvents();
+  }
+
+  function openEvent(index) {
+    currentIndex = index;
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("eventPage").classList.remove("hidden");
+
+    document.getElementById("eventTitle").value = events[index].name;
+    document.getElementById("eventDesc").value = events[index].note;
+  }
+
+  function saveNote() {
+    events[currentIndex].name = document.getElementById("eventTitle").value;
+    events[currentIndex].note = document.getElementById("eventDesc").value;
+    localStorage.setItem("events", JSON.stringify(events));
+    alert("Catatan tersimpan!");
+    goHome();
+  }
+
+  function goHome() {
+    document.getElementById("home").classList.remove("hidden");
+    document.getElementById("eventPage").classList.add("hidden");
+    renderEvents();
+  }
+
+  renderEvents();
+</script>
+
+</body>
+</html>
