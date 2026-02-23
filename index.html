@@ -221,7 +221,14 @@ function closeModal() {
   },200);
 }
 
-loadData();
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    loadData();
+  } catch (e) {
+    console.error(e);
+    if (events && events.length) renderEvents();
+  }
+});
 </script>
 
   <!-- MODERN POPUP -->
