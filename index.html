@@ -19,7 +19,7 @@
 
   <!-- MAIN -->
   <div id="home" class="p-4 max-w-md mx-auto">
-    <h2 class="text-xl font-semibold mb-4">Daftar Event</h2>
+    
 
     <div id="eventList" class="grid gap-3"></div>
 
@@ -30,11 +30,9 @@
   <div id="eventPage" class="hidden p-4 max-w-md mx-auto">
     <button onclick="goHome()" class="mb-4 text-purple-600">← Kembali</button>
 
-    <input id="eventTitle" type="text" placeholder="Judul catatan..."
-      class="w-full text-xl font-bold mb-3 p-3 border rounded-xl" />
+    <div id="notesContainer" class="space-y-4"></div>
 
-    <textarea id="eventDesc" placeholder="Tulis deskripsi atau catatan event di sini..."
-      class="w-full h-72 p-3 border rounded-xl text-base"></textarea>
+    <button onclick="addSection()" class="mt-2 bg-purple-600 text-white px-4 py-2 rounded-xl">+ Tambah Judul</button>
 
     <button onclick="saveNote()" class="mt-4 bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-xl">
       Simpan
@@ -83,16 +81,11 @@
     currentIndex = index;
     document.getElementById("home").classList.add("hidden");
     document.getElementById("eventPage").classList.remove("hidden");
-
-    document.getElementById("eventTitle").value = events[index].name;
-    document.getElementById("eventDesc").value = events[index].note || "";
+    renderSections();
   }
 
   function saveNote() {
-    events[currentIndex].name = document.getElementById("eventTitle").value;
-    events[currentIndex].note = document.getElementById("eventDesc").value;
     alert("Catatan tersimpan di browser ini");
-    goHome();
   }
 
   function goHome() {
@@ -102,7 +95,44 @@
   }
 
   // render saat halaman dibuka
-  document.addEventListener("DOMContentLoaded", renderEvents);
+  document.addEventListener("DOMContentLoaded", () => {
+  renderEvents();
+});
+
+function renderSections() {
+  const container = document.getElementById("notesContainer");
+  container.innerHTML = "";
+
+  if (!events[currentIndex].sections) {
+    events[currentIndex].sections = [];
+  }
+
+  events[currentIndex].sections.forEach((sec, i) => {
+    const div = document.createElement("div");
+    div.className = "bg-white p-4 rounded-2xl shadow";
+
+    div.innerHTML = `
+      <input type="text" placeholder="Judul" value="${sec.title}" 
+        oninput="events[${currentIndex}].sections[${i}].title=this.value"
+        class="w-full font-semibold text-lg mb-2 border-b pb-1 outline-none">
+
+      <textarea placeholder="Deskripsi" 
+        oninput="events[${currentIndex}].sections[${i}].desc=this.value"
+        class="w-full text-sm outline-none">${sec.desc}</textarea>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+function addSection() {
+  if (!events[currentIndex].sections) {
+    events[currentIndex].sections = [];
+  }
+
+  events[currentIndex].sections.push({ title: "", desc: "" });
+  renderSections();
+}
 </script>
 
   <!-- MODERN POPUP -->
