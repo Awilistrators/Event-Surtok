@@ -39,65 +39,86 @@
     </button>
   </div>
 
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
 <script>
-  const events = [
-    { name: "Ramadan Sale", date: "6 - 8 Maret 2026", active: true, note: "" },
-    { name: "Big Sale Vol. 2", date: "12 - 14 Juni 2026", active: false },
-    { name: "Fun Bike Part 1", date: "16 Agustus 2026", active: false },
-    { name: "Fun Run Part 2", date: "13 September 2026", active: false },
-    { name: "Big Sale Vol. 3", date: "29 - 31 Desember 2026", active: false }
-  ];
+// 🔹 GANTI DENGAN CONFIG FIREBASE MILIKMU
+const firebaseConfig = {
+  apiKey: "AIzaSyDAuW3ZoAQrWxG2V211l6pHM5J-c_EWveo",
+  authDomain: "suryatokoku-event.firebaseapp.com",
+  databaseURL: "https://suryatokoku-event-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "suryatokoku-event",
+  storageBucket: "suryatokoku-event.firebasestorage.app",
+  messagingSenderId: "16304012353",
+  appId: "1:16304012353:web:40de1cd98b94462803dac0",
+  measurementId: "G-MZ86HBKBME"
+};
 
-  let currentIndex = null;
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-  function renderEvents() {
-    const list = document.getElementById("eventList");
-    list.innerHTML = "";
+let events = [];
+let currentIndex = null;
 
-    events.forEach((event, index) => {
-      const btn = document.createElement("button");
-      btn.className = `shadow active:scale-95 transition p-5 rounded-2xl text-center text-lg font-semibold ${event.active ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}`;
-      btn.innerHTML = `
-        <div class="font-semibold">${event.name}</div>
-        <div class='text-sm opacity-80 mt-1'>${event.date}</div>
-        <div class='mt-2 text-xs font-bold ${event.active ? "text-green-100 bg-green-600" : "text-yellow-800 bg-yellow-300"} inline-block px-3 py-1 rounded-full'>
-          ${event.active ? "LIVE" : "SOON"}
-        </div>
-      `;
-
-      btn.onclick = () => {
-        if (!event.active) {
-          showModal();
-          return;
-        }
-        openEvent(index);
-      };
-
-      list.appendChild(btn);
-    });
-  }
-
-  function openEvent(index) {
-    currentIndex = index;
-    document.getElementById("home").classList.add("hidden");
-    document.getElementById("eventPage").classList.remove("hidden");
-    renderSections();
-  }
-
-  function saveNote() {
-    alert("Catatan tersimpan di browser ini");
-  }
-
-  function goHome() {
-    document.getElementById("home").classList.remove("hidden");
-    document.getElementById("eventPage").classList.add("hidden");
+function loadData() {
+  db.ref("events").on("value", snapshot => {
+    const data = snapshot.val();
+    if (data) {
+      events = data;
+    } else {
+      events = [
+        { name: "Ramadan Sale", date: "6 - 8 Maret 2026", active: true, sections: [] },
+        { name: "Big Sale Vol. 2", date: "12 - 14 Juni 2026", active: false },
+        { name: "Fun Bike Part 1", date: "16 Agustus 2026", active: false },
+        { name: "Fun Run Part 2", date: "13 September 2026", active: false },
+        { name: "Big Sale Vol. 3", date: "29 - 31 Desember 2026", active: false }
+      ];
+      saveData();
+    }
     renderEvents();
-  }
+  });
+}
 
-  // render saat halaman dibuka
-  document.addEventListener("DOMContentLoaded", () => {
-  renderEvents();
-});
+function saveData() {
+  db.ref("events").set(events);
+}
+
+function renderEvents() {
+  const list = document.getElementById("eventList");
+  list.innerHTML = "";
+
+  events.forEach((event, index) => {
+    const btn = document.createElement("button");
+    btn.className = `shadow active:scale-95 transition p-5 rounded-2xl text-center text-lg font-semibold ${event.active ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}`;
+
+    btn.innerHTML = `
+      <div class="font-semibold">${event.name}</div>
+      <div class='text-sm opacity-80 mt-1'>${event.date}</div>
+      <div class='mt-2 text-xs font-bold ${event.active ? "text-green-100 bg-green-600" : "text-yellow-800 bg-yellow-300"} inline-block px-3 py-1 rounded-full'>
+        ${event.active ? "LIVE" : "SOON"}
+      </div>
+    `;
+
+    btn.onclick = () => {
+      if (!event.active) {
+        showModal();
+        return;
+      }
+      openEvent(index);
+    };
+
+    list.appendChild(btn);
+  });
+}
+
+function openEvent(index) {
+  currentIndex = index;
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("eventPage").classList.remove("hidden");
+  renderSections();
+}
 
 function renderSections() {
   const container = document.getElementById("notesContainer");
@@ -113,11 +134,11 @@ function renderSections() {
 
     div.innerHTML = `
       <input type="text" placeholder="Judul" value="${sec.title}" 
-        oninput="events[${currentIndex}].sections[${i}].title=this.value"
+        oninput="updateSection(${i}, 'title', this.value)"
         class="w-full font-semibold text-lg mb-2 border-b pb-1 outline-none">
 
       <textarea placeholder="Deskripsi" 
-        oninput="events[${currentIndex}].sections[${i}].desc=this.value"
+        oninput="updateSection(${i}, 'desc', this.value)"
         class="w-full text-sm outline-none">${sec.desc}</textarea>
     `;
 
@@ -125,14 +146,48 @@ function renderSections() {
   });
 }
 
+function updateSection(i, field, value) {
+  events[currentIndex].sections[i][field] = value;
+  saveData();
+}
+
 function addSection() {
   if (!events[currentIndex].sections) {
     events[currentIndex].sections = [];
   }
-
   events[currentIndex].sections.push({ title: "", desc: "" });
+  saveData();
   renderSections();
 }
+
+function goHome() {
+  document.getElementById("home").classList.remove("hidden");
+  document.getElementById("eventPage").classList.add("hidden");
+}
+
+// MODAL
+function showModal() {
+  const modal = document.getElementById("comingSoonModal");
+  const box = document.getElementById("modalBox");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  setTimeout(()=>{
+    box.classList.remove("scale-90","opacity-0");
+    box.classList.add("scale-100","opacity-100");
+  },10);
+}
+
+function closeModal() {
+  const modal = document.getElementById("comingSoonModal");
+  const box = document.getElementById("modalBox");
+  box.classList.add("scale-90","opacity-0");
+  setTimeout(()=>{
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  },200);
+}
+
+loadData();
 </script>
 
   <!-- MODERN POPUP -->
