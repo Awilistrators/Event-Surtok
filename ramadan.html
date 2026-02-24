@@ -11,6 +11,7 @@
 
 <body class="bg-gray-100">
 
+<!-- HEADER -->
 <div class="bg-white text-center py-5 shadow-sm">
   <img src="Logo Ramadhan Sale.png"
        alt="Ramadan Sale"
@@ -36,7 +37,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <script>
-// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDAuW3ZoAQrWxG2V211l6pHM5J-c_EWveo",
   authDomain: "suryatokoku-event.firebaseapp.com",
@@ -50,49 +50,67 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let sections=[];
+let sections = [];
 
+// LOAD DATA
 function loadData(){
-  db.ref("ramadanSale").on("value",snap=>{
-    sections=snap.val() || [];
+  db.ref("ramadanSale").on("value", snap=>{
+    sections = snap.val() || [];
     render();
   });
 }
 
+// SAVE
 function save(){
   db.ref("ramadanSale").set(sections);
 }
 
-   <textarea id="desc-${i}" rows="1"
-  class="w-full outline-none bg-transparent resize-none overflow-hidden"
-  disabled>${s.desc||''}</textarea>
+// RENDER UI
+function render(){
+  const container = document.getElementById("notes");
+  container.innerHTML = "";
+
+  sections.forEach((s,i)=>{
+    const box = document.createElement("div");
+    box.className = "note-box";
+
+    box.innerHTML = `
+      <div class="flex justify-between items-start mb-2">
+
+        <input id="title-${i}" value="${s.title||''}"
+          class="w-full font-semibold text-center text-lg border-b outline-none bg-transparent disabled:border-transparent"
+          disabled>
+
+        <div class="flex gap-2 ml-2">
+          <button id="editBtn-${i}" onclick="editSection(${i})">✏️</button>
+          <button onclick="deleteSection(${i})">🗑</button>
+          <button id="saveBtn-${i}" onclick="saveSection(${i})"
+            class="hidden text-green-600 font-bold">💾</button>
+        </div>
+
+      </div>
+
+      <textarea id="desc-${i}" rows="1"
+        class="w-full outline-none bg-transparent resize-none overflow-hidden"
+        disabled>${s.desc||''}</textarea>
+    `;
+
     container.appendChild(box);
-    setTimeout(() => {
-  document.querySelectorAll("textarea").forEach(autoResize);
-}, 0);
   });
+
+  // auto resize textarea setelah render
+  setTimeout(()=>{
+    document.querySelectorAll("textarea").forEach(autoResize);
+  },0);
 }
-  
+
+// TAMBAH BAGIAN
 function addSection(){
   sections.push({title:"",desc:""});
   save();
 }
 
-function saveSection(i){
-  sections[i].title = document.getElementById(`title-${i}`).value;
-  sections[i].desc = document.getElementById(`desc-${i}`).value;
-
-  save();
-  render();
-}
-
-function deleteSection(i){
-  if(confirm("Hapus bagian ini?")){
-    sections.splice(i,1);
-    save();
-  }
-}
-
+// EDIT MODE
 function editSection(i){
   const title = document.getElementById(`title-${i}`);
   const desc  = document.getElementById(`desc-${i}`);
@@ -110,6 +128,24 @@ function editSection(i){
   autoResize(desc);
 }
 
+// SIMPAN
+function saveSection(i){
+  sections[i].title = document.getElementById(`title-${i}`).value;
+  sections[i].desc  = document.getElementById(`desc-${i}`).value;
+
+  save();
+  render();
+}
+
+// HAPUS
+function deleteSection(i){
+  if(confirm("Hapus bagian ini?")){
+    sections.splice(i,1);
+    save();
+  }
+}
+
+// AUTO RESIZE TEXTAREA
 function autoResize(el){
   el.style.height = "auto";
   el.style.height = el.scrollHeight + "px";
