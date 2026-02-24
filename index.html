@@ -73,8 +73,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 let events = [];
-let currentIndex = null;
-
+let currentIndex = localStorage.getItem("openEventIndex");
+  
 function loadData() {
   db.ref("events").on("value", snapshot => {
     const data = snapshot.val();
@@ -129,7 +129,9 @@ function renderEvents(){
 }
 
 function openEvent(index){
-  currentIndex=index;
+  currentIndex = index;
+  localStorage.setItem("openEventIndex", index);
+
   document.getElementById("home").classList.add("hidden");
   document.getElementById("eventPage").classList.remove("hidden");
   renderSections();
@@ -185,10 +187,12 @@ function autoGrow(el){
 }
 
 function goHome(){
+  localStorage.removeItem("openEventIndex");
+
   document.getElementById("home").classList.remove("hidden");
   document.getElementById("eventPage").classList.add("hidden");
 }
-
+  
 /* POPUPS */
 function showModal(){
   const modal=document.getElementById("comingSoonModal");
@@ -218,6 +222,12 @@ function showSavedModal(){
 }
 
 loadData();
+
+setTimeout(() => {
+  if (currentIndex !== null && events[currentIndex]) {
+    openEvent(currentIndex);
+  }
+}, 500);
 </script>
 </body>
 </html>
