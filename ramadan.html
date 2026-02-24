@@ -72,21 +72,34 @@ function render(){
     box.className="note-box";
 
     box.innerHTML=`
-      <input value="${s.title||''}"
-        oninput="update(${i},'title',this.value)"
-        class="w-full font-semibold border-b mb-2 outline-none"
-        placeholder="Judul">
+      <div class="flex justify-between items-start mb-2">
 
-      <textarea rows="1"
-        oninput="autoGrow(this);update(${i},'desc',this.value)"
-        class="w-full outline-none"
-        placeholder="Deskripsi">${s.desc||''}</textarea>
+        <input id="title-${i}" value="${s.title||''}"
+          class="w-full font-semibold border-b outline-none bg-transparent"
+          disabled>
+
+        <div class="flex gap-2 ml-2">
+
+          <button id="editBtn-${i}" onclick="editSection(${i})">✏️</button>
+
+          <button onclick="deleteSection(${i})">🗑</button>
+
+          <button id="saveBtn-${i}" onclick="saveSection(${i})"
+            class="hidden text-green-600 font-bold">💾</button>
+
+        </div>
+
+      </div>
+
+      <textarea id="desc-${i}" rows="1"
+        class="w-full outline-none bg-transparent"
+        disabled>${s.desc||''}</textarea>
     `;
 
     container.appendChild(box);
   });
 }
-
+  
 function update(i,field,value){
   sections[i][field]=value;
   save();
@@ -100,6 +113,21 @@ function addSection(){
 function autoGrow(el){
   el.style.height="auto";
   el.style.height=el.scrollHeight+"px";
+}
+
+function saveSection(i){
+  sections[i].title = document.getElementById(`title-${i}`).value;
+  sections[i].desc = document.getElementById(`desc-${i}`).value;
+
+  save();
+  render();
+}
+
+function deleteSection(i){
+  if(confirm("Hapus bagian ini?")){
+    sections.splice(i,1);
+    save();
+  }
 }
 
 loadData();
