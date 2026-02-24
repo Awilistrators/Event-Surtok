@@ -11,10 +11,10 @@
 
 <body class="bg-gray-100">
 
-<div class="bg-purple-600 text-center py-4 shadow">
+<div class="bg-white text-center py-5 shadow-sm">
   <img src="Logo Ramadhan Sale.png"
        alt="Ramadan Sale"
-       class="mx-auto h-14 object-contain">
+       class="mx-auto h-20 object-contain drop-shadow-sm">
 </div>
 
 <div class="p-4 max-w-md mx-auto">
@@ -101,19 +101,9 @@ function render(){
   });
 }
   
-function update(i,field,value){
-  sections[i][field]=value;
-  save();
-}
-
 function addSection(){
   sections.push({title:"",desc:""});
   save();
-}
-
-function autoGrow(el){
-  el.style.height="auto";
-  el.style.height=el.scrollHeight+"px";
 }
 
 function saveSection(i){
