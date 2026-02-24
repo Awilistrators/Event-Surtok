@@ -7,6 +7,9 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="style.css">
+
+<!-- QUILL EDITOR -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100">
@@ -24,7 +27,7 @@
 ← Kembali
 </button>
 
-<div id="notes" class="space-y-4"></div>
+<div id="notes" class="space-y-6"></div>
 
 <button onclick="addSection()" class="btn-primary">
 + Tambah Judul
@@ -54,6 +57,9 @@
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<!-- Quill -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -85,7 +91,7 @@ function save(){
   db.ref("ramadanSale").set(sections);
 }
 
-// RENDER UI
+// RENDER
 function render(){
   const container = document.getElementById("notes");
   container.innerHTML = "";
@@ -98,7 +104,7 @@ function render(){
       <div class="flex justify-between items-start mb-2">
 
         <input id="title-${i}" value="${s.title||''}"
-          class="w-full font-semibold text-center text-lg border-b outline-none bg-transparent disabled:border-transparent"
+          class="w-full font-semibold text-center text-lg border-b outline-none bg-transparent"
           disabled>
 
         <div class="flex gap-2 ml-2">
@@ -110,53 +116,59 @@ function render(){
 
       </div>
 
-      <textarea id="desc-${i}" rows="1"
-        class="w-full outline-none bg-transparent resize-none overflow-hidden"
-        disabled>${s.desc||''}</textarea>
+      <div id="editor-${i}"></div>
     `;
 
     container.appendChild(box);
   });
 
-  setTimeout(()=>{
-    document.querySelectorAll("textarea").forEach(autoResize);
-  },0);
+  // INIT QUILL EDITOR
+  sections.forEach((s,i)=>{
+    const quill = new Quill(`#editor-${i}`, {
+      theme: "snow",
+      readOnly: true,
+      modules: {
+        toolbar: [
+          ['bold','italic','underline'],
+          [{ 'color': [] }],
+          [{ 'list': 'bullet' }],
+          ['link']
+        ]
+      }
+    });
+
+    quill.root.innerHTML = s.desc || "";
+    sections[i].quill = quill;
+  });
 }
 
-// TAMBAH BAGIAN
+// ADD SECTION
 function addSection(){
   sections.push({title:"",desc:""});
   save();
 }
 
-// EDIT MODE
+// EDIT
 function editSection(i){
-  const title = document.getElementById(`title-${i}`);
-  const desc  = document.getElementById(`desc-${i}`);
-
-  title.disabled = false;
-  desc.disabled  = false;
-
-  desc.oninput = () => autoResize(desc);
-
-  title.focus();
+  document.getElementById(`title-${i}`).disabled = false;
+  sections[i].quill.enable(true);
 
   document.getElementById(`editBtn-${i}`).classList.add("hidden");
   document.getElementById(`saveBtn-${i}`).classList.remove("hidden");
-
-  autoResize(desc);
 }
 
-// SIMPAN
+// SAVE
 function saveSection(i){
   sections[i].title = document.getElementById(`title-${i}`).value;
-  sections[i].desc  = document.getElementById(`desc-${i}`).value;
+  sections[i].desc  = sections[i].quill.root.innerHTML;
+
+  sections[i].quill.enable(false);
 
   save();
   render();
 }
 
-// HAPUS (pakai popup)
+// DELETE POPUP
 function deleteSection(i){
   deleteIndex = i;
   document.getElementById("deleteModal").classList.remove("hidden");
@@ -175,12 +187,6 @@ document.getElementById("confirmDeleteBtn").onclick = function(){
     closeDeleteModal();
   }
 };
-
-// AUTO RESIZE TEXTAREA
-function autoResize(el){
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
 
 loadData();
 </script>
