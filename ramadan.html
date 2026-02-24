@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ramadan Sale</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-100">
 
-<div class="bg-purple-600 text-white text-center py-4">
+<div class="bg-purple-600 text-white text-center py-4 shadow">
   <h2 class="text-xl font-semibold">Ramadan Sale</h2>
 </div>
 
@@ -21,7 +23,7 @@
 
 <div id="notes" class="space-y-4"></div>
 
-<button onclick="addSection()" class="bg-purple-600 text-white px-4 py-2 rounded-xl w-full">
+<button onclick="addSection()" class="btn-primary">
 + Tambah Judul
 </button>
 
@@ -30,14 +32,27 @@
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="firebase.js"></script>
 
 <script>
+// CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyDAuW3ZoAQrWxG2V211l6pHM5J-c_EWveo",
+  authDomain: "suryatokoku-event.firebaseapp.com",
+  databaseURL: "https://suryatokoku-event-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "suryatokoku-event",
+  storageBucket: "suryatokoku-event.firebasestorage.app",
+  messagingSenderId: "16304012353",
+  appId: "1:16304012353:web:40de1cd98b94462803dac0"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 let sections=[];
 
 function loadData(){
   db.ref("ramadanSale").on("value",snap=>{
-    sections=snap.val()||[];
+    sections=snap.val() || [];
     render();
   });
 }
@@ -47,28 +62,31 @@ function save(){
 }
 
 function render(){
-  const c=document.getElementById("notes");
-  c.innerHTML="";
+  const container=document.getElementById("notes");
+  container.innerHTML="";
 
   sections.forEach((s,i)=>{
     const box=document.createElement("div");
-    box.className="bg-white p-4 rounded-2xl shadow";
+    box.className="note-box";
 
     box.innerHTML=`
-      <input value="${s.title||''}" 
+      <input value="${s.title||''}"
         oninput="update(${i},'title',this.value)"
-        class="w-full font-semibold border-b mb-2">
+        class="w-full font-semibold border-b mb-2 outline-none"
+        placeholder="Judul">
 
-      <textarea oninput="autoGrow(this);update(${i},'desc',this.value)"
-        class="w-full resize-none overflow-hidden"
-        rows="1">${s.desc||''}</textarea>
+      <textarea rows="1"
+        oninput="autoGrow(this);update(${i},'desc',this.value)"
+        class="w-full outline-none"
+        placeholder="Deskripsi">${s.desc||''}</textarea>
     `;
-    c.appendChild(box);
+
+    container.appendChild(box);
   });
 }
 
-function update(i,f,v){
-  sections[i][f]=v;
+function update(i,field,value){
+  sections[i][field]=value;
   save();
 }
 
@@ -84,5 +102,6 @@ function autoGrow(el){
 
 loadData();
 </script>
+
 </body>
 </html>
