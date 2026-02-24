@@ -1,14 +1,20 @@
-/* FONT */
+/* =========================
+   FONT TITLE
+========================= */
 .title-font {
   font-family: 'Lilita One', cursive;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 .header-gradient {
   background: linear-gradient(90deg, #9333ea, #ec4899);
 }
 
-/* CARD */
+/* =========================
+   CARD BUTTON
+========================= */
 .card-btn {
   border-radius: 18px;
   padding: 20px;
@@ -21,7 +27,9 @@
   transform: scale(0.96);
 }
 
-/* BADGE */
+/* =========================
+   BADGE STATUS
+========================= */
 .badge {
   display: inline-block;
   padding: 4px 12px;
@@ -40,7 +48,9 @@
   color: #92400e;
 }
 
-/* NOTE BOX */
+/* =========================
+   NOTE BOX
+========================= */
 .note-box {
   background: white;
   padding: 16px;
@@ -48,22 +58,59 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* TEXTAREA */
+/* =========================
+   TEXTAREA
+========================= */
 textarea {
   resize: none;
   overflow: hidden;
 }
 
-/* BUTTON */
+/* =========================
+   PRIMARY BUTTON
+========================= */
 .btn-primary {
-  background: #9333ea;
+  background: linear-gradient(90deg, #9333ea, #ec4899);
   color: white;
   border-radius: 14px;
   padding: 12px;
   width: 100%;
   margin-top: 10px;
+  font-weight: 500;
 }
 
 .btn-primary:active {
   transform: scale(0.97);
+}
+
+/* =========================
+   IMAGE & LOGO OPTIMIZATION
+========================= */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =========================
+   PREVENT HORIZONTAL SCROLL
+========================= */
+body {
+  overflow-x: hidden;
+}
+
+/* =========================
+   IFRAME RESPONSIVE
+========================= */
+iframe {
+  max-width: 100%;
+  display: block;
+  border: 0;
+}
+
+/* =========================
+   SMOOTH SCROLL (OPTIONAL)
+========================= */
+html {
+  scroll-behavior: smooth;
 }
