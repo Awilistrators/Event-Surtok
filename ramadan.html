@@ -75,9 +75,8 @@ function render(){
       <div class="flex justify-between items-start mb-2">
 
         <input id="title-${i}" value="${s.title||''}"
-          class="w-full font-semibold border-b outline-none bg-transparent disabled:border-transparent"
-          class="w-full font-semibold border-b outline-none bg-transparent disabled:border-transparent"
-          disabled>
+  class="w-full font-semibold text-center text-lg border-b outline-none bg-transparent disabled:border-transparent"
+  disabled>
 
         <div class="flex gap-2 ml-2">
 
@@ -93,11 +92,12 @@ function render(){
       </div>
 
       <textarea id="desc-${i}" rows="1"
-        class="w-full outline-none bg-transparent"
-        disabled>${s.desc||''}</textarea>
-    `;
-
+  class="w-full outline-none bg-transparent resize-none overflow-hidden"
+  disabled>${s.desc||''}</textarea>
     container.appendChild(box);
+    setTimeout(() => {
+  document.querySelectorAll("textarea").forEach(autoResize);
+}, 0);
   });
 }
   
@@ -122,13 +122,25 @@ function deleteSection(i){
 }
 
 function editSection(i){
-  document.getElementById(`title-${i}`).disabled = false;
-  document.getElementById(`desc-${i}`).disabled = false;
+  const title = document.getElementById(`title-${i}`);
+  const desc  = document.getElementById(`desc-${i}`);
 
-  document.getElementById(`title-${i}`).focus();
+  title.disabled = false;
+  desc.disabled  = false;
+
+  desc.oninput = () => autoResize(desc);
+
+  title.focus();
 
   document.getElementById(`editBtn-${i}`).classList.add("hidden");
   document.getElementById(`saveBtn-${i}`).classList.remove("hidden");
+
+  autoResize(desc);
+}
+
+function autoResize(el){
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
 }
 
 loadData();
