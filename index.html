@@ -4,39 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Out Event</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100">
 
-<div class="bg-gradient-to-r from-purple-600 to-pink-500 text-white text-center py-6 shadow">
-  <h1 class="text-3xl" style="font-family:'Lilita One',cursive">
+<!-- HEADER -->
+<div class="header-gradient text-white text-center py-6 shadow">
+  <h1 class="text-3xl title-font">
     All Out Event<br>Suryatokoku
   </h1>
 </div>
 
+<!-- EVENT LIST -->
 <div class="p-4 max-w-md mx-auto grid gap-3">
 
-  <!-- LIVE EVENT -->
-  <a href="ramadan.html" class="bg-green-500 text-white p-5 rounded-2xl text-center shadow active:scale-95 transition">
+  <!-- LIVE -->
+  <a href="ramadan.html" class="card-btn bg-green-500 text-white">
     <div class="font-semibold">Ramadan Sale</div>
     <div class="text-sm opacity-80">6 - 8 Maret 2026</div>
-    <div class="mt-2 text-xs bg-green-600 inline-block px-3 py-1 rounded-full">LIVE</div>
+    <div class="badge live">LIVE</div>
   </a>
 
-  <!-- COMING SOON -->
-  <button onclick="comingSoon()" class="bg-gray-200 text-gray-500 p-5 rounded-2xl text-center shadow">
+  <!-- SOON -->
+  <button onclick="comingSoon()" class="card-btn bg-gray-200 text-gray-500">
     <div class="font-semibold">Big Sale Vol. 2</div>
     <div class="text-sm">12 - 14 Juni 2026</div>
-    <div class="mt-2 text-xs bg-yellow-300 text-yellow-800 inline-block px-3 py-1 rounded-full">SOON</div>
+    <div class="badge soon">SOON</div>
+  </button>
+
+  <button onclick="comingSoon()" class="card-btn bg-gray-200 text-gray-500">
+    <div class="font-semibold">Fun Bike Part 1</div>
+    <div class="text-sm">16 Agustus 2026</div>
+    <div class="badge soon">SOON</div>
+  </button>
+
+  <button onclick="comingSoon()" class="card-btn bg-gray-200 text-gray-500">
+    <div class="font-semibold">Fun Run Part 2</div>
+    <div class="text-sm">13 September 2026</div>
+    <div class="badge soon">SOON</div>
   </button>
 
 </div>
 
 <!-- POPUP -->
-<div id="soonModal" class="fixed inset-0 hidden items-center justify-center bg-black/40">
-  <div class="bg-white p-6 rounded-xl text-center">
+<div id="soonModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div class="bg-white p-6 rounded-xl text-center shadow">
     🚧 Coming Soon
   </div>
 </div>
@@ -46,7 +62,7 @@ function comingSoon(){
   const m=document.getElementById("soonModal");
   m.classList.remove("hidden");
   m.classList.add("flex");
-  setTimeout(()=>m.classList.add("hidden"),1000);
+  setTimeout(()=>m.classList.add("hidden"),1200);
 }
 </script>
 
