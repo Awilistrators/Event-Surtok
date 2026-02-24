@@ -1,0 +1,66 @@
+/* FONT TITLE */
+.title-font {
+  font-family: 'Lilita One', cursive;
+}
+
+/* HEADER */
+.header-gradient {
+  background: linear-gradient(90deg, #9333ea, #ec4899);
+}
+
+/* CARD BUTTON */
+.card-btn {
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.card-btn:active {
+  transform: scale(0.96);
+}
+
+/* STATUS BADGE */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* LIVE */
+.live {
+  background: #16a34a;
+  color: white;
+}
+
+/* SOON */
+.soon {
+  background: #fde68a;
+  color: #92400e;
+}
+
+/* NOTE BOX */
+.note-box {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* TEXTAREA AUTO */
+textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+/* BUTTON PRIMARY */
+.btn-primary {
+  background: #9333ea;
+  color: white;
+  border-radius: 14px;
+  padding: 10px;
+  width: 100%;
+}
