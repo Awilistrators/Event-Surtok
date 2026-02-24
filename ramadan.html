@@ -12,7 +12,7 @@
 <body class="bg-gray-100">
 
 <div class="bg-purple-600 text-center py-4 shadow">
-  <img src="Ramadhan Sale Suryatokoku.png"
+  <img src="Logo Ramadhan Sale.png"
        alt="Ramadan Sale"
        class="mx-auto h-14 object-contain">
 </div>
@@ -75,7 +75,8 @@ function render(){
       <div class="flex justify-between items-start mb-2">
 
         <input id="title-${i}" value="${s.title||''}"
-          class="w-full font-semibold border-b outline-none bg-transparent"
+          class="w-full font-semibold border-b outline-none bg-transparent disabled:border-transparent"
+          class="w-full font-semibold border-b outline-none bg-transparent disabled:border-transparent"
           disabled>
 
         <div class="flex gap-2 ml-2">
@@ -128,6 +129,16 @@ function deleteSection(i){
     sections.splice(i,1);
     save();
   }
+}
+
+function editSection(i){
+  document.getElementById(`title-${i}`).disabled = false;
+  document.getElementById(`desc-${i}`).disabled = false;
+
+  document.getElementById(`title-${i}`).focus();
+
+  document.getElementById(`editBtn-${i}`).classList.add("hidden");
+  document.getElementById(`saveBtn-${i}`).classList.remove("hidden");
 }
 
 loadData();
