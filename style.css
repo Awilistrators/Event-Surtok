@@ -114,3 +114,36 @@ iframe {
 html {
   scroll-behavior: smooth;
 }
+
+/* ===== GOOGLE DOC MOBILE FIX ===== */
+
+/* wrapper untuk scaling */
+.doc-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* default desktop */
+.doc-wrapper iframe {
+  width: 100%;
+  height: 85vh;
+  border: 0;
+}
+
+/* khusus HP */
+@media (max-width: 768px) {
+  .doc-wrapper iframe {
+    transform: scale(0.85);   /* perkecil tampilan */
+    transform-origin: top left;
+    width: 118%;              /* kompensasi scale */
+    height: 95vh;
+  }
+}
+
+/* extra kecil */
+@media (max-width: 420px) {
+  .doc-wrapper iframe {
+    transform: scale(0.78);
+    width: 128%;
+  }
+}
