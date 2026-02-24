@@ -63,35 +63,7 @@ function save(){
   db.ref("ramadanSale").set(sections);
 }
 
-function render(){
-  const container=document.getElementById("notes");
-  container.innerHTML="";
-
-  sections.forEach((s,i)=>{
-    const box=document.createElement("div");
-    box.className="note-box";
-
-    box.innerHTML=`
-      <div class="flex justify-between items-start mb-2">
-
-        <input id="title-${i}" value="${s.title||''}"
-  class="w-full font-semibold text-center text-lg border-b outline-none bg-transparent disabled:border-transparent"
-  disabled>
-
-        <div class="flex gap-2 ml-2">
-
-          <button id="editBtn-${i}" onclick="editSection(${i})">✏️</button>
-
-          <button onclick="deleteSection(${i})">🗑</button>
-
-          <button id="saveBtn-${i}" onclick="saveSection(${i})"
-            class="hidden text-green-600 font-bold">💾</button>
-
-        </div>
-
-      </div>
-
-      <textarea id="desc-${i}" rows="1"
+   <textarea id="desc-${i}" rows="1"
   class="w-full outline-none bg-transparent resize-none overflow-hidden"
   disabled>${s.desc||''}</textarea>
     container.appendChild(box);
