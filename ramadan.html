@@ -32,6 +32,25 @@
 
 </div>
 
+<!-- DELETE MODAL -->
+<div id="deleteModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl shadow-xl p-6 w-72 text-center">
+    <div class="text-3xl mb-2">⚠️</div>
+    <h3 class="font-semibold text-lg mb-2">Hapus bagian?</h3>
+    <p class="text-sm text-gray-500 mb-4">Data yang dihapus tidak bisa dikembalikan.</p>
+
+    <div class="flex gap-3 justify-center">
+      <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-lg bg-gray-200">
+        Batal
+      </button>
+
+      <button id="confirmDeleteBtn" class="px-4 py-2 rounded-lg bg-red-500 text-white">
+        Hapus
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -51,6 +70,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 let sections = [];
+let deleteIndex = null;
 
 // LOAD DATA
 function loadData(){
@@ -60,7 +80,7 @@ function loadData(){
   });
 }
 
-// SAVE
+// SAVE DATA
 function save(){
   db.ref("ramadanSale").set(sections);
 }
@@ -98,7 +118,6 @@ function render(){
     container.appendChild(box);
   });
 
-  // auto resize textarea setelah render
   setTimeout(()=>{
     document.querySelectorAll("textarea").forEach(autoResize);
   },0);
@@ -137,13 +156,25 @@ function saveSection(i){
   render();
 }
 
-// HAPUS
+// HAPUS (pakai popup)
 function deleteSection(i){
-  if(confirm("Hapus bagian ini?")){
-    sections.splice(i,1);
-    save();
-  }
+  deleteIndex = i;
+  document.getElementById("deleteModal").classList.remove("hidden");
+  document.getElementById("deleteModal").classList.add("flex");
 }
+
+function closeDeleteModal(){
+  document.getElementById("deleteModal").classList.add("hidden");
+  document.getElementById("deleteModal").classList.remove("flex");
+}
+
+document.getElementById("confirmDeleteBtn").onclick = function(){
+  if(deleteIndex !== null){
+    sections.splice(deleteIndex,1);
+    save();
+    closeDeleteModal();
+  }
+};
 
 // AUTO RESIZE TEXTAREA
 function autoResize(el){
