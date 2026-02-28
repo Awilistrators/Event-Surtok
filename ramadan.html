@@ -2,18 +2,15 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-
-<!-- viewport normal -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Ramadan Sale</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body{
-  background:#f3f4f6;
-  overflow-x:hidden;
+html, body {
+  overflow-x: hidden;
+  background: #f3f4f6;
 }
 
 /* HEADER */
@@ -37,7 +34,7 @@ body{
   font-weight:500;
 }
 
-/* WRAPPER DOC */
+/* WRAPPER */
 .doc-fit{
   width:100%;
   overflow:hidden;
@@ -46,19 +43,19 @@ body{
   box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
-/* desktop normal */
+/* desktop */
 .doc-fit iframe{
   width:100%;
   height:90vh;
   border:0;
 }
 
-/* 📱 AUTO FIT MOBILE — FINAL */
+/* 📱 MOBILE AUTO FIT */
 @media (max-width:768px){
   .doc-fit iframe{
-    transform:scale(0.66);     /* sedikit diperkecil */
+    transform:scale(0.64);
     transform-origin:top left;
-    width:152%;                /* kompensasi pas */
+    width:156%;
     height:120vh;
   }
 }
@@ -66,13 +63,9 @@ body{
 /* layar kecil */
 @media (max-width:420px){
   .doc-fit iframe{
-    transform:scale(0.60);
-    width:168%;
+    transform:scale(0.58);
+    width:175%;
   }
-}
-
-html, body {
-  overflow-x: hidden;
 }
 </style>
 </head>
@@ -99,7 +92,7 @@ html, body {
   </iframe>
 </div>
 
-<!-- EDIT BUTTON -->
+<!-- BUTTON EDIT -->
 <a href="https://docs.google.com/document/d/1qPwm76zb5mqvxtDN_ZLN07SNT_hm9c9_HmuIDE1-N5s/edit"
    target="_blank"
    class="btn-primary">
