@@ -34,7 +34,7 @@ html, body{
   font-weight:500;
 }
 
-/* DOCUMENT WRAPPER */
+/* DOC WRAPPER */
 .doc-fit{
   width:100%;
   overflow:hidden;
@@ -43,49 +43,29 @@ html, body{
   box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
-/* iframe normal */
+/* desktop */
 .doc-fit iframe{
   width:100%;
-  height:70vh;
+  height:88vh;
   border:0;
 }
 
-/* MOBILE AUTO FIT */
+/* 📱 MOBILE AUTO FIT (ANTI SCROLL) */
 @media (max-width:768px){
   .doc-fit iframe{
-    transform:scale(0.64);
+    transform:scale(0.63);
     transform-origin:top left;
-    width:156%;
-    height:100vh;
+    width:158%;
+    height:120vh;
   }
 }
 
-/* FULLSCREEN MODE */
-.fullscreen{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100vw;
-  height:100vh;
-  background:white;
-  z-index:9999;
-  padding:10px;
-}
-
-.fullscreen iframe{
-  height:100%;
-}
-
-/* close button */
-.close-btn{
-  position:absolute;
-  top:10px;
-  right:12px;
-  background:#9333ea;
-  color:white;
-  padding:6px 12px;
-  border-radius:8px;
-  font-size:14px;
+/* layar kecil */
+@media (max-width:420px){
+  .doc-fit iframe{
+    transform:scale(0.58);
+    width:172%;
+  }
 }
 </style>
 </head>
@@ -105,43 +85,21 @@ html, body{
 ← Kembali
 </button>
 
-<!-- DOCUMENT -->
-<div id="docBox" class="doc-fit">
+<!-- GOOGLE DOC -->
+<div class="doc-fit">
   <iframe
     src="https://docs.google.com/document/d/e/2PACX-1vS1WjeYZkT1sc0iOT30YWsa2dX9XzXJqgFhmjS7G5B_VH6ToJcObkCzKioENvstCuZiR5HsHH7eqvCG/pub?embedded=true">
   </iframe>
 </div>
 
-<!-- FULLSCREEN BUTTON -->
-<button onclick="openFullscreen()" class="btn-primary">
-🖥 Full Screen
-</button>
-
 <!-- EDIT BUTTON -->
 <a href="https://docs.google.com/document/d/1qPwm76zb5mqvxtDN_ZLN07SNT_hm9c9_HmuIDE1-N5s/edit"
    target="_blank"
    class="btn-primary">
-✏️ Edit Dokumen
+   ✏️ Edit Dokumen
 </a>
 
 </div>
-
-<script>
-function openFullscreen(){
-  const box = document.getElementById("docBox");
-  box.classList.add("fullscreen");
-
-  const closeBtn = document.createElement("button");
-  closeBtn.innerText = "Tutup";
-  closeBtn.className = "close-btn";
-  closeBtn.onclick = () => {
-    box.classList.remove("fullscreen");
-    closeBtn.remove();
-  };
-
-  box.appendChild(closeBtn);
-}
-</script>
 
 </body>
 </html>
