@@ -115,3 +115,37 @@ iframe {
 html {
   scroll-behavior: smooth;
 }
+
+/* =================================
+   FORCE DESKTOP VIEW FOR GOOGLE DOC
+================================= */
+
+.doc-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* desktop normal */
+.doc-wrapper iframe {
+  width: 100%;
+  height: 90vh;
+  border: 0;
+}
+
+/* mobile scaling */
+@media (max-width: 768px) {
+  .doc-wrapper iframe {
+    transform: scale(0.72);
+    transform-origin: top left;
+    width: 138%;
+    height: 120vh;
+  }
+}
+
+/* extra small phones */
+@media (max-width: 420px) {
+  .doc-wrapper iframe {
+    transform: scale(0.65);
+    width: 155%;
+  }
+}
