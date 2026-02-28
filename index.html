@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=500">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Out Event</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -13,46 +13,59 @@
 <body class="bg-gray-100">
 
 <!-- HEADER -->
-<div class="header-gradient text-white text-center py-6 shadow">
-  <h1 class="text-3xl title-font">
-    All Out Event<br>Suryatokoku 2026
+<div class="header-gradient text-white text-center py-7 shadow">
+  <h1 class="text-3xl title-font leading-tight">
+    All Out Event<br>Suryatokoku
   </h1>
 </div>
 
 <!-- EVENT LIST -->
-<div class="p-4 max-w-md mx-auto grid gap-3">
+<div class="px-4 py-5 space-y-4 max-w-lg mx-auto">
 
-  <!-- LIVE -->
-  <a href="ramadan.html" class="card-btn bg-green-500 text-white">
-    <div class="font-semibold">Ramadan Sale</div>
-    <div class="text-sm opacity-80">6 - 8 Maret 2026</div>
+  <!-- LIVE EVENT -->
+  <a href="ramadan.html"
+     class="card-btn bg-green-500 text-white block active:scale-95">
+
+    <div class="text-lg font-semibold">Ramadan Sale</div>
+    <div class="text-sm opacity-90">6 - 8 Maret 2026</div>
     <div class="badge live">LIVE</div>
   </a>
 
-  <!-- SOON -->
-  <button onclick="comingSoon()" class="card-btn bg-gray-200 text-gray-500">
-    <div class="font-semibold">Big Sale Vol. 2</div>
+  <!-- SOON EVENTS -->
+  <button onclick="comingSoon()"
+          class="card-btn bg-gray-200 text-gray-600 w-full">
+    <div class="text-lg font-semibold">Big Sale Vol. 2</div>
     <div class="text-sm">12 - 14 Juni 2026</div>
     <div class="badge soon">SOON</div>
   </button>
 
-  <button onclick="comingSoon()" class="card-btn bg-gray-200 text-gray-500">
-    <div class="font-semibold">Fun Bike Part 1</div>
+  <button onclick="comingSoon()"
+          class="card-btn bg-gray-200 text-gray-600 w-full">
+    <div class="text-lg font-semibold">Fun Bike Part 1</div>
     <div class="text-sm">16 Agustus 2026</div>
     <div class="badge soon">SOON</div>
   </button>
 
-  <button onclick="comingSoon()" class="card-btn bg-gray-200 text-gray-500">
-    <div class="font-semibold">Fun Run Part 2</div>
+  <button onclick="comingSoon()"
+          class="card-btn bg-gray-200 text-gray-600 w-full">
+    <div class="text-lg font-semibold">Fun Run Part 2</div>
     <div class="text-sm">13 September 2026</div>
+    <div class="badge soon">SOON</div>
+  </button>
+
+  <button onclick="comingSoon()"
+          class="card-btn bg-gray-200 text-gray-600 w-full">
+    <div class="text-lg font-semibold">Big Sale Vol. 3</div>
+    <div class="text-sm">29 - 31 Desember 2026</div>
     <div class="badge soon">SOON</div>
   </button>
 
 </div>
 
 <!-- POPUP -->
-<div id="soonModal" class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
-  <div class="bg-white p-6 rounded-xl text-center shadow">
+<div id="soonModal"
+     class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div class="bg-white px-6 py-4 rounded-xl text-center shadow-lg text-lg">
     🚧 Coming Soon
   </div>
 </div>
