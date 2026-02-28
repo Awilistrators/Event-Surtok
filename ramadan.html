@@ -53,12 +53,12 @@ body{
   border:0;
 }
 
-/* 📱 AUTO FIT MOBILE */
+/* 📱 AUTO FIT MOBILE — FINAL */
 @media (max-width:768px){
   .doc-fit iframe{
-    transform:scale(0.68);
+    transform:scale(0.66);     /* sedikit diperkecil */
     transform-origin:top left;
-    width:148%;
+    width:152%;                /* kompensasi pas */
     height:120vh;
   }
 }
@@ -66,9 +66,13 @@ body{
 /* layar kecil */
 @media (max-width:420px){
   .doc-fit iframe{
-    transform:scale(0.62);
-    width:165%;
+    transform:scale(0.60);
+    width:168%;
   }
+}
+
+html, body {
+  overflow-x: hidden;
 }
 </style>
 </head>
